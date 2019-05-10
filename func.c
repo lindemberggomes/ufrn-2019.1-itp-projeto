@@ -1,7 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-//copia a imagem para outro arquivo
+/*
+	Esta função copia a imagem para outro arquivo.
+	A cópia é feita caracter por caracter da imagem de entrada
+	para a imagem de saída.
+*/
 void copiaImagem(FILE *imgEntrada, FILE *imgSaida){
 	if (imgEntrada == NULL){
 		printf("Não foi possível abrir o arquivo!!!\n");
