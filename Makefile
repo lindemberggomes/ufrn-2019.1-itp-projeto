@@ -1,4 +1,4 @@
-secao_1: FUNC
+all: FUNC
 	gcc main.c func.o -o a.out
 	./a.out
 FUNC:
