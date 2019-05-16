@@ -1,0 +1,9 @@
+
+1) https://www.vivaolinux.com.br/artigo/Manipulacao-de-imagens-no-formato-PPM
+. Abrindo e salvando arquivo ppm
+. Manipulação de imagens no formato PPM
+. Filtros
+
+2) https://www.vivaolinux.com.br/artigo/Manipulacao-de-imagens-no-formato-PPM?pagina=2
+
+3) https://pt.stackoverflow.com/questions/136858/girar-imagem-ppm-em-90-graus-em-c (Girando a imagen 90º)
