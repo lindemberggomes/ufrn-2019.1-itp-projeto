@@ -1,15 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "func.h"
+#include "rotacao.h"
 
-int MAX_STR = 50;
+typedef struct {
+    int r, g, b;
+} pixel;
 
-//função em fase de teste
-//FILE *abrirImagem(char img[50], char modo[3]);
+int MAX_STR = 50, MAX_VTR = 1000, MAX = 500;
 
-int main(){
-	//declarações de variáveis
-	char string[MAX_STR], modo[3];
+int main(int argc, char** argv){
 	//declara, abre e copia a imagem
 	FILE *imgEntrada, *imgSaida, *img;
 	imgEntrada = fopen("rgb.ppm", "r");		//fazer uma função pra abrir
@@ -18,28 +18,19 @@ int main(){
 	//fecha as imagens
 	fclose(imgEntrada);
 	fclose(imgSaida);
-/*
-	//abrir uma imagem
-	printf("Digite o nome da imagem: ");
-	fgets(string, MAX_STR, stdin);
-	printf("Digite o modo: r ou w: ");
-	fgets(modo, 3, stdin);
-	imgSaida = abrirImagem(string, modo);
-	//res = abrirImagem(string, modo);???
-	//imprimir res????
-	//fclose(img); ????
 
-	//função: abre um arquivo de imagem -- em fase de testes
-	FILE *abrirImagem(char img[50], char modo[3]){	
-		FILE *retorno;
-		//img = fopen("rgb2.ppm", "r");
-		//printf("Digite o nome da imagem: ");
-		//fgets(string, MAX_STR, stdin);
-		//retorno = fopen(string, "r");
-		retorno = fopen(img, modo);
-		return retorno;
-	}
-*/
+	/* aplicar o filtro de tom de cinzas */
+    pixel imagem[MAX][MAX]; //cria uma matriz de pixeis para armazenar a imagem
+    char code[3]; //o código para saber se a imagem é ascii ou binária
+    int max; //o valor máximo de tonalidade de cada pixel
+    int larg, alt; // largura e altura da imagem em pixeis
+
+    ler_ascii(imagem, code, &max, &larg, &alt);
+    gray_scale(imagem, larg, alt);
+    //autorelevo(imagem, larg, alt);
+    //espelhar(imagem, larg, alt);
+    salvar_ascii(imagem, code, max, larg, alt);
+
 	printf("\n");
 	return 0;
 }

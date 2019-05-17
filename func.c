@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "func.h" 
+#include "func.h"
 /*
 	Esta função copia a imagem para outro arquivo.
 	A cópia é feita caracter por caracter da imagem de entrada

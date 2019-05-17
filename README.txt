@@ -67,3 +67,10 @@ implementando, por vezes vemos que podíamos ter implementado algo de forma dife
 4) Como compilar o projeto, deixando explícito se foi utilizada alguma biblioteca externa que precise ser instalada, que versão e quais parâmetros extras são necessários para o
 compilador.
 
+*** PADRONIZAÇÕES ***
+. variavel: int nome (simples). int nomeMaiuscula (composta). Ex.: int vetorNome.
+. nome da função: tipo 
+
+
+
+
