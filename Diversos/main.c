@@ -21,7 +21,7 @@ int main(int argc, char** argv) {
     ler_ascii(imagem, code, &max, &larg, &alt);
     //gray_scale(imagem, larg, alt);
     //autorelevo(imagem, larg, alt);
-    //espelhar(imagem, larg, alt);
+    espelhar(imagem, larg, alt);
     salvar_ascii(imagem, code, max, larg, alt);
 
     return 0;
