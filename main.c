@@ -19,7 +19,7 @@ void filtro_cinza(Imagem imagem, int coluna, int linha);
 void salvar_imagem(Imagem imagem, char *code, int max, int coluna, int linha);
 
 void alocar_memoria(Imagem imagem);
-void liberar_memoria(Imagem imagem, Imagem lin);
+void liberar_memoria(Imagem imagem);
 
 //função principal
 int main() {
@@ -47,12 +47,7 @@ void menu(){
         switch (op){
             case 1:
                 ler_imagem(imagem, code, &max, &larg, &alt);
-         
-                //aloca espaço de memória dinamicamente
-                imagem.col = larg;
-                imagem.lin = alt;
-                alocar_memoria(imagem);               
-             
+          
                 /* aplicar o filtro de tom de cinzas */
                 filtro_cinza(imagem, larg, alt);
                 salvar_imagem(imagem, code, max, larg, alt);
@@ -78,7 +73,7 @@ void ler_imagem(Imagem imagem, char *code, int *max, int *coluna, int *linha) {
     FILE *arquivo;
 
     char nome_arq[50];
-    printf("entre com o nome do arquivo: \n");
+    printf("Digite o nome do arquivo de imagem: \n");
     scanf("%s", nome_arq);
 
     if ((arquivo = fopen(nome_arq, "r")) == NULL) {
@@ -91,13 +86,38 @@ void ler_imagem(Imagem imagem, char *code, int *max, int *coluna, int *linha) {
     fscanf(arquivo, "%d", linha);
     fscanf(arquivo, "%d", max);
 
+    //aloca espaço de memória dinamicamente
+    imagem.col = *coluna;
+    imagem.lin = *linha;
+
+/* -----------TESTE: ok------------*/
+    printf("---Teste: imagem.col = %i\n", imagem.col);
+    printf("---Teste: imagem.lin = %i\n", imagem.lin);
+//------------FIM TESTE------------
+
+    alocar_memoria(imagem);               
+
+/* -----------TESTE: ok------------*/
+    printf("---teste: ATEH AQUI OK---\n");
+//------------FIM TESTE------------
+
     for (i = 0; i < *linha; i++) {
         for (j = 0; j < *coluna; j++) {
-            fscanf(arquivo, "%d", &imagem[i][j].r);
-            fscanf(arquivo, "%d", &imagem[i][j].g);
-            fscanf(arquivo, "%d", &imagem[i][j].b);
+            fscanf(arquivo, "%d", &imagem.matriz[i][j].r);
+            fscanf(arquivo, "%d", &imagem.matriz[i][j].g);
+            fscanf(arquivo, "%d", &imagem.matriz[i][j].b);
         }
     }
+
+
+/* -----------TESTE: bug------------*/
+    printf("---Teste: imagem.matriz[0][0] = %i\n", imagem.matriz[0][0]);
+    printf("---Teste: imagem.matriz[0][1] = %i\n", imagem.matriz[0][1]);
+    printf("---Teste: imagem.matriz[0][2] = %i\n", imagem.matriz[0][2]);
+//------------FIM TESTE------------
+
+
+
     fclose(arquivo);
 }
 
@@ -105,14 +125,14 @@ void filtro_cinza(Imagem imagem, int coluna, int linha) {
     int i, j;
     for (i = 0; i < linha; i++) {
         for (j = 0; j < coluna; j++) {
-            imagem[i][j].r = (int) ((0.299 * imagem[i][j].r) + (0.587 * imagem[i][j].g) + (0.144 * imagem[i][j].b)); //calcula o valor para conversão
-            imagem[i][j].g = imagem[i][j].r; //copia o valor para
-            imagem[i][j].b = imagem[i][j].r; //todas componentes
+            imagem.matriz[i][j].r = (int) ((0.299 * imagem.matriz[i][j].r) + (0.587 * imagem.matriz[i][j].g) + (0.144 * imagem.matriz[i][j].b)); //calcula o valor para conversão
+            imagem.matriz[i][j].g = imagem.matriz[i][j].r; //copia o valor para
+            imagem.matriz[i][j].b = imagem.matriz[i][j].r; //todas componentes
             //testa o valor para ver se o mesmo não passou de 255
-            if (imagem[i][j].r > 255) {
-                imagem[i][j].r = 255;
-                imagem[i][j].g = 255;
-                imagem[i][j].b = 255;
+            if (imagem.matriz[i][j].r > 255) {
+                imagem.matriz[i][j].r = 255;
+                imagem.matriz[i][j].g = 255;
+                imagem.matriz[i][j].b = 255;
             }
         }
     }
@@ -123,7 +143,7 @@ void salvar_imagem(Imagem imagem, char *code, int max, int coluna, int linha) {
     FILE *arquivo;
 
     char nome_arq[50];
-    printf("entre com o nome que deseja salvar: \n");
+    printf("Digite o nome da imagem que deseja salvar: \n");
     scanf("%s", nome_arq);
 
     arquivo = fopen(nome_arq, "w");
@@ -135,9 +155,9 @@ void salvar_imagem(Imagem imagem, char *code, int max, int coluna, int linha) {
 
     for (i = 0; i < linha; i++) {
         for (j = 0; j < coluna; j++) {
-            fprintf(arquivo, "%d ", imagem[i][j].r);
-            fprintf(arquivo, "%d ", imagem[i][j].g);
-            fprintf(arquivo, "%d\n", imagem[i][j].b);
+            fprintf(arquivo, "%d ", imagem.matriz[i][j].r);
+            fprintf(arquivo, "%d ", imagem.matriz[i][j].g);
+            fprintf(arquivo, "%d\n", imagem.matriz[i][j].b);
         }
     }
     fclose(arquivo);
@@ -145,16 +165,16 @@ void salvar_imagem(Imagem imagem, char *code, int max, int coluna, int linha) {
 
 /* faz a alocação dinâmica de memória da imagem */
 void alocar_memoria(Imagem imagem){
-    imagem.matriz = calloc(imagem.lin, sizeof(int));
+    imagem.matriz = (Pixel**)calloc(imagem.lin, sizeof(Pixel*));
     for (int i = 0; i < imagem.lin; i++){
-        imagem[i] = calloc(imagem.col, sizeof(int));
+        imagem.matriz[i] = (Pixel*)calloc(imagem.col, sizeof(Pixel));
     }
 }
 
 /* faz a liberação de memória alocada da imagem */
-void liberar_memoria(Imagem imagem, Imagem lin){
+void liberar_memoria(Imagem imagem){
     for (int i = 0; i < imagem.lin; i++){
-        free(imagem[i]);
+        free(imagem.matriz[i]);
     }
-    free(imagem);
+    free(imagem.matriz);
 }
