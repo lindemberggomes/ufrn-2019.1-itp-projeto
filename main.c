@@ -8,18 +8,22 @@ typedef struct {
     int r, g, b;
 } Pixel;
 
-void menu();
-void ler_imagem(Pixel **imagem, char *code, int *max, int *coluna, int *linha);
-void filtro_cinza(Pixel **imagem, int coluna, int linha);
-void salvar_imagem(Pixel **imagem, char *code, int max, int coluna, int linha);
+typedef struct {
+    int col, lin;
+    Pixel **matriz;
+} Imagem;
 
-void alocar_memoria(Pixel **imagem, int coluna, int linha);
-void liberar_memoria(Pixel **imagem, int linha);
+void menu();
+void ler_imagem(Imagem imagem, char *code, int *max, int *coluna, int *linha);
+void filtro_cinza(Imagem imagem, int coluna, int linha);
+void salvar_imagem(Imagem imagem, char *code, int max, int coluna, int linha);
+
+void alocar_memoria(Imagem imagem);
+void liberar_memoria(Imagem imagem, Imagem lin);
 
 //função principal
 int main() {
     menu();     //chama a função menu
-
     printf("\nSistema encerrado com suvesso!!!\n");
 	printf("\n");
 	return 0;
@@ -27,9 +31,9 @@ int main() {
 
 /*O programa fica rodando até escolher a opção 0 (sair: opção zero)*/
 void menu(){
-    Pixel **imagem; //cria uma matriz de pixeis para armazenar a imagem
+    Imagem imagem; //declara matriz de pixeis que armazena a imagem
     char code[3]; //o código para saber se a imagem é ascii ou binária
-    int max; //o valor máximo de tonalidade de cada pixel
+    int max; //valor máximo de cada pixel
     int larg, alt; // largura e altura da imagem em pixeis
     int op;
     do{
@@ -45,14 +49,16 @@ void menu(){
                 ler_imagem(imagem, code, &max, &larg, &alt);
          
                 //aloca espaço de memória dinamicamente
-                alocar_memoria(imagem, larg, alt);               
+                imagem.col = larg;
+                imagem.lin = alt;
+                alocar_memoria(imagem);               
              
                 /* aplicar o filtro de tom de cinzas */
                 filtro_cinza(imagem, larg, alt);
                 salvar_imagem(imagem, code, max, larg, alt);
                
                 //libera o espaço de memória alocado dinamicamente
-                liberar_memoria(imagem, alt);
+                liberar_memoria(imagem);
                 printf("\nFiltro de cinza aplicado na imagem com sucesso!!!");
                 break;
             case 0:
@@ -66,7 +72,7 @@ void menu(){
 
 }
 
-void ler_imagem(Pixel **imagem, char *code, int *max, int *coluna, int *linha) {
+void ler_imagem(Imagem imagem, char *code, int *max, int *coluna, int *linha) {
     int i, j;
 
     FILE *arquivo;
@@ -95,7 +101,7 @@ void ler_imagem(Pixel **imagem, char *code, int *max, int *coluna, int *linha) {
     fclose(arquivo);
 }
 
-void filtro_cinza(Pixel **imagem, int coluna, int linha) {
+void filtro_cinza(Imagem imagem, int coluna, int linha) {
     int i, j;
     for (i = 0; i < linha; i++) {
         for (j = 0; j < coluna; j++) {
@@ -112,7 +118,7 @@ void filtro_cinza(Pixel **imagem, int coluna, int linha) {
     }
 }
 
-void salvar_imagem(Pixel **imagem, char *code, int max, int coluna, int linha) {
+void salvar_imagem(Imagem imagem, char *code, int max, int coluna, int linha) {
     int i, j;
     FILE *arquivo;
 
@@ -138,16 +144,16 @@ void salvar_imagem(Pixel **imagem, char *code, int max, int coluna, int linha) {
 }
 
 /* faz a alocação dinâmica de memória da imagem */
-void alocar_memoria(Pixel **imagem, int coluna, int linha){
-    imagem = calloc(linha, sizeof(int));
-    for (int i = 0; i < linha; i++){
-        imagem[i] = calloc(coluna, sizeof(int));
+void alocar_memoria(Imagem imagem){
+    imagem.matriz = calloc(imagem.lin, sizeof(int));
+    for (int i = 0; i < imagem.lin; i++){
+        imagem[i] = calloc(imagem.col, sizeof(int));
     }
 }
 
 /* faz a liberação de memória alocada da imagem */
-void liberar_memoria(Pixel **imagem, int linha){
-    for (int i = 0; i < linha; i++){
+void liberar_memoria(Imagem imagem, Imagem lin){
+    for (int i = 0; i < imagem.lin; i++){
         free(imagem[i]);
     }
     free(imagem);
