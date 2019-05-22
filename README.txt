@@ -7,6 +7,8 @@ Autores: Elildes Fortaleza Santos e Lindemberg Gomes da Silva
 
 *** TAREFAS ***
 1) Cria pastas para salvar tipos de arquivos iguais
+> filtro.c: escala de cinza, filtro xxx
+> rotacao: 
 
 2) Cria arquivos .c e .h: para separar arquivos com funcionalidades parecidas:
 > funções parecidas, leitura/escrita, iteração com o usuário
