@@ -17,11 +17,9 @@ Autores: Elildes Fortaleza Santos e Lindemberg Gomes da Silva
 > Fazer as definições de: struct e enum
 > Definir as constantes (#define)
 . Criar filtro em escala de cinzas:
-	imagem[i][j].r = (int) ((0.299 * imagem[i][j].r) + (0.587 * imagem[i][j].g) + (0.144 * imagem[i][j].b));
-   
-    imagem[i][j].g = imagem[i][j].r;
-    imagem[i][j].b = imagem[i][j].r;
-
+	imagem->matriz[i][j].r = (int) (((imagem->matriz[i][j].r) + (imagem->matriz[i][j].g) + (imagem->matriz[i][j].b))/3); //calcula o valor para conversão
+            imagem->matriz[i][j].g = imagem->matriz[i][j].r; //copia o valor para
+            imagem->matriz[i][j].b = imagem->matriz[i][j].r; //todos membros r, g, b
 4) Outros Filtros:
 . Auto relevo:
 0      -1       0
